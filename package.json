@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/zenoven/webpack-demos/issues"
   },
-  "homepage": "https://github.com/zenoven/webpack-demos#readme"
+  "homepage": "https://github.com/zenoven/webpack-demos#readme",
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  },
+  "devDependencies": {
+    "webpack": "^2.7.0"
+  }
 }
