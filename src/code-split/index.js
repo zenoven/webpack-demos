@@ -1,6 +1,7 @@
 var common = require('./common.js')
+require('./a.js')
 
-require.ensure(['./a.js'], function(require){
+require.ensure([], function(require){
   require('./b.js')
 })
 

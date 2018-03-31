@@ -23,6 +23,7 @@
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
-    "webpack": "^2.7.0"
+    "webpack": "^4.4.1",
+    "webpack-cli": "^2.0.13"
   }
 }
