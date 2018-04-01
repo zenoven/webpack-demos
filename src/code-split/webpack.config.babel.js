@@ -1,21 +1,22 @@
 import webpack from 'webpack'
+import HTMLWebpackPlugin from 'html-webpack-plugin'
+import CleanWebpackPlugin from 'clean-webpack-plugin'
 import path from 'path'
 const root = path.join(__dirname, '../../')
 const projectPath = path.join(__dirname, './')
 const buildPath = path.join(root, 'build', __dirname.slice(__dirname.lastIndexOf('/')))
+const mode = process.env.NODE_ENV || 'development'
 
-console.log('__dirname', __dirname)
-console.log('root:', root)
 console.log('buildPath:', buildPath)
-
 const config = {
+  mode: mode,
   entry: {
     index: './index.js'
   },
   context: projectPath,
   output: {
-    filename: '[name].js',
-    chunkFilename: '[name].js',
+    filename: '[name].[chunkhash:22].js',
+    chunkFilename: '[name].[chunkhash:22].js',
     path: buildPath
   },
   module: {
@@ -45,7 +46,13 @@ const config = {
       }
 
     ]
-  }
+  },
+  plugins: [
+    new CleanWebpackPlugin([buildPath]),
+    new HTMLWebpackPlugin({
+      template: 'index.html',
+    })
+  ]
 }
 
 export default config
