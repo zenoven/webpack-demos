@@ -1,6 +1,3 @@
-import webpack from 'webpack'
-import HTMLWebpackPlugin from 'html-webpack-plugin'
-import CleanWebpackPlugin from 'clean-webpack-plugin'
 import path from 'path'
 const root = path.join(__dirname, '../../')
 const projectPath = path.join(__dirname, './')
@@ -8,14 +5,11 @@ const buildPath = path.join(root, 'build', __dirname.slice(__dirname.lastIndexOf
 const mode = process.env.NODE_ENV || 'development'
 const isProduction = mode === 'production'
 
-console.log('buildPath:', buildPath)
 const config = {
   mode: mode,
-  devtool: 'source-map',
   entry: {
     index: './index.js'
   },
-  watch: true,
   context: projectPath,
   output: {
     filename: '[name].[chunkhash:22].js',
@@ -49,23 +43,7 @@ const config = {
       }
 
     ]
-  },
-  plugins: [
-    new CleanWebpackPlugin(buildPath, {
-      root: root
-    }),
-    new HTMLWebpackPlugin({
-      template: 'index.html',
-      minify: !isProduction ? false : {
-        removeAttributeQuotes: true,
-        collapseWhitespace: true,
-        html5: true,
-        minifyCSS: true,
-        removeComments: true,
-        removeEmptyAttributes: true,
-      },
-    })
-  ]
+  }
 }
 
 export default config
