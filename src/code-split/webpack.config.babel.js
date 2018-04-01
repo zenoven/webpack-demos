@@ -48,7 +48,9 @@ const config = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin([buildPath]),
+    new CleanWebpackPlugin([buildPath], {
+      root: root
+    }),
     new HTMLWebpackPlugin({
       template: 'index.html',
     })
