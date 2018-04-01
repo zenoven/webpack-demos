@@ -7,5 +7,6 @@ require.ensure([], function(require){
 
 require.ensure(['./b.js'], function(require){
   require('./c.js')
+  console.log('module c is loaded')
 })
 

@@ -11,6 +11,7 @@ const isProduction = mode === 'production'
 console.log('buildPath:', buildPath)
 const config = {
   mode: mode,
+  devtool: 'source-map',
   entry: {
     index: './index.js'
   },
