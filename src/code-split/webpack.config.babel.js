@@ -6,6 +6,7 @@ const root = path.join(__dirname, '../../')
 const projectPath = path.join(__dirname, './')
 const buildPath = path.join(root, 'build', __dirname.slice(__dirname.lastIndexOf('/')))
 const mode = process.env.NODE_ENV || 'development'
+const isProduction = mode === 'production'
 
 console.log('buildPath:', buildPath)
 const config = {
@@ -53,6 +54,14 @@ const config = {
     }),
     new HTMLWebpackPlugin({
       template: 'index.html',
+      minify: !isProduction ? false : {
+        removeAttributeQuotes: true,
+        collapseWhitespace: true,
+        html5: true,
+        minifyCSS: true,
+        removeComments: true,
+        removeEmptyAttributes: true,
+      },
     })
   ]
 }
