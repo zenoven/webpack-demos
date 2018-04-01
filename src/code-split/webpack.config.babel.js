@@ -15,6 +15,7 @@ const config = {
   entry: {
     index: './index.js'
   },
+  watch: true,
   context: projectPath,
   output: {
     filename: '[name].[chunkhash:22].js',
