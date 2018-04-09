@@ -1,13 +1,13 @@
 import webpack from 'webpack'
+import webpackDevMiddleWare from 'webpack-dev-middleware'
 import parseArgs from 'minimist'
 import path from 'path'
+
 const root = path.join(__dirname, '../')
-console.log('process.argv:', process.argv)
 const args = parseArgs(process.argv.slice(2))
 const project = args['project']
-const ENV = process.env.NODE_ENV || 'development'
+const env = args['env'] || 'development'
 const configDir = path.join(root, 'src', project)
-const config = require(`${configDir}/config/webpack.config.${ENV}.js`)
-
-console.log('config:', config)
+const config = require(`${configDir}/config/webpack.config.${env}.js`)
+const compiler = webpack(config)
 
