@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/zenoven/webpack-demos#readme",
   "dependencies": {
+    "cross-env": "^5.1.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   },

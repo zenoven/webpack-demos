@@ -5,8 +5,48 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script>
+    (function(){
+      var basis = 20
+      var MAX_WIDTH = 750
+      var rootElement = document.documentElement
+      var resizeEvent = 'orientationchange' in window ? 'orientationchange' : 'resize'
+      var calcFontSize = function(){
+        var screenWidth = rootElement.clientWidth
+        var width = screenWidth < MAX_WIDTH ? screenWidth : MAX_WIDTH
+        var fontSize = width / basis
+        rootElement.style.fontSize = fontSize + 'px'
+        if(screenWidth > MAX_WIDTH) {
+          rootElement.style.margin = 'auto'
+          rootElement.style.width = MAX_WIDTH + 'px'
+        }
+        console.log('screenWidth:', screenWidth)
+        console.log('fontSize:', fontSize)
+        console.log('screenWidth:', screenWidth)
+      }
+      if(!document.addEventListener) return
+      window.addEventListener(resizeEvent, calcFontSize, false)
+      document.addEventListener('DOMContentLoaded', calcFontSize, false)
+    })()
+  </script>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      /*font-size: 16px;*/
+    }
+    .main {
+      width: 20rem;
+      height: 1rem;
+      background: #b8b8b8;
+    }
+  </style>
   <title>Hello World</title>
 </head>
 <body>
+<div class="main"></div>
 </body>
 </html>

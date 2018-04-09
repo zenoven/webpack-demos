@@ -1,4 +1,5 @@
 var common = require('./common.js')
+var listTest = require('./long-list')
 require('./a.js')
 
 require.ensure([], function(require){
@@ -12,4 +13,8 @@ require.ensure(['./b.js'], function(require){
 })
 
 console.log('hello world ')
+
+document.addEventListener('DOMContentLoaded', function(){
+  listTest.start()
+})
 
