@@ -22,7 +22,7 @@ const config = Object.assign({}, baseConfig, {
   },
   output: {
     filename: '[name].js',
-    chunkFilename: '[chunkname].js',
+    chunkFilename: '[chunkhash].js',
     path: buildPath
   },
   plugins: [
