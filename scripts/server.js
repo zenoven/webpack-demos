@@ -1,13 +1,28 @@
 import webpack from 'webpack'
-import webpackDevMiddleWare from 'webpack-dev-middleware'
+import WebpackDevServer from 'webpack-dev-server'
 import parseArgs from 'minimist'
 import path from 'path'
+import fs from 'fs'
+import yaml from 'js-yaml'
 
 const root = path.join(__dirname, '../')
 const args = parseArgs(process.argv.slice(2))
 const project = args['project']
 const env = args['env'] || 'development'
-const configDir = path.join(root, 'src', project)
-const config = require(`${configDir}/config/webpack.config.${env}.js`)
+const projectDir = path.join(root, 'src', project)
+const config = require(`${projectDir}/config/webpack.config.${env}.js`)
+console.log('config:', config)
 const compiler = webpack(config)
+const appConfig = yaml.safeLoad(fs.readFileSync(`${projectDir}/config/app.yml`))
+const {server: {devPort}} = appConfig
+
+const server = new WebpackDevServer(compiler, {
+  stats: {
+    color: true
+  }
+})
+
+server.listen(devPort, () => {
+  console.log('dev server started')
+})
 
