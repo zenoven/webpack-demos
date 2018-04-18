@@ -1,4 +1,4 @@
-const COUNT = 100000
+const COUNT = 10000
 module.exports = {
   calcTime(func, timeLogs){
     var start = new Date()
@@ -63,6 +63,20 @@ module.exports = {
       }, index * 5000)
     })
 
-    window.logs = logs
+    this.observe()
+  },
+  observe(){
+    let observer = new MutationObserver( (mutations, obs) => {
+      mutations.forEach( (m, index) => {
+        index <= 4 && console.log('mutation:', m)
+      })
+      console.log('observer in callback:', obs)
+      console.log('observer outer:', observer)
+      console.log('equal? ', observer === obs)
+    })
+    observer.observe(document.body, {
+      subtree: true,
+      childList: true
+    })
   }
 }
