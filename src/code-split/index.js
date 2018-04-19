@@ -13,7 +13,7 @@ require.ensure(['./b.js'], function(require){
   console.log('hello module c')
 })
 
-console.log('hello world ')
+console.log('hello world aaa!')
 
 document.addEventListener('DOMContentLoaded', function(){
   listTest.start()

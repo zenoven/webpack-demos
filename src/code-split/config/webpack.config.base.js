@@ -1,7 +1,7 @@
 import path from 'path'
-const root = path.join(__dirname, '../../')
+const root = path.join(__dirname, '../../../')
 const projectPath = path.join(__dirname, '../')
-const buildPath = path.join(root, 'build', __dirname.slice(__dirname.lastIndexOf('/')))
+const buildPath = path.join(root, 'build', path.basename(projectPath) )
 const mode = process.env.NODE_ENV || 'development'
 
 const config = {

@@ -9,13 +9,16 @@ export default {
     // console.log('y:', y)
     // console.log('z:', z)
     yield x + y + z
+    yield x
+    console.log('x:', x)
   },
   start(){
     let getResult = this.test(10)
     console.log('a:', getResult.next())     //{value: 11, done: false}  x = 10
     console.log('b:', getResult.next(5))    //{value: 15, done: false}  x = 10  y = 5
     console.log('c:', getResult.next(6))    //{value: 21, done: false}  x = 10  y = 5  z = 6
-    console.log('d:', getResult.next(7))    //{value: undefined, done: true}  x = 10  y = 5  z = 6
+    console.log('d:', getResult.next(7))    //{value: 10, done: true}  x = 10  y = 5  z = 6
+    console.log('d:', getResult.next(8))    //{value: undefined, done: true}  x = 10  y = 5  z = 6
   }
 }
 
