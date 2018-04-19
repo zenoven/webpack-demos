@@ -1,5 +1,6 @@
 var common = require('./common.js')
 var listTest = require('./long-list')
+import Gen from './generator'
 require('./a.js')
 
 require.ensure([], function(require){
@@ -16,5 +17,8 @@ console.log('hello world ')
 
 document.addEventListener('DOMContentLoaded', function(){
   listTest.start()
+  Gen.start()
 })
+
+
 
