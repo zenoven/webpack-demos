@@ -41,6 +41,19 @@ function uniqueWithDoubleLoop(arr) {
   return result
 }
 
-function uniqueWithObject(arr){
+function uniqueWithObject(arr) {
+  let obj = {}
+  let result = []
+  for(let item of arr) {
+    let type = typeof item
+    if(!obj[item]) {
+      obj[item] = [type]
+      result.push(item)
+    }else if(obj[item].indexOf(type) < 0){
+      obj[item].push(type)
+      result.push(item)
+    }
+  }
 
+  return result
 }
