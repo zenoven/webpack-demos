@@ -1,16 +1,12 @@
-function compose() {
-  let funcs = [].slice.call(arguments, 0)
-  return function(){
-    let args = arguments
-    // return funcs.reverse().reduce((prev, next) => {
-    //   return next(prev.apply(null, args))
-    // })
-
-    // or
-    return funcs.reduceRight((prev, next) => {
-      return next(prev.apply(null, args))
-    })
+function compose(){
+  let functions = [].slice.call(arguments)
+  if(!functions) {
+    throw new Error('参数不能为空')
   }
+  if(functions.length < 2) {
+    return functions[0]
+  }
+  return functions.reduceRight( (func, next) =>  (...args) => next(func(...args)) )
 }
 
 function shout(a){
@@ -23,6 +19,11 @@ function uppercase(str){
   return str.toUpperCase()
 }
 
-var composed = compose(shout, uppercase)
+function addQuote(str){
+  console.log('addQuote called')
+  return `"${str}"`
+}
+
+var composed = compose(shout, uppercase, addQuote)
 
 console.log(composed('hello world'))
