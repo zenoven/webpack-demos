@@ -22,7 +22,7 @@ const {server: {devPort}} = appConfig
 const devClient = [`webpack-dev-server/client?http://${devIP}:${devPort}`]
 const publicPath = config.output.publicPath = `http://${devIP}:${devPort}/build/`
 
-fs.removeSync(projectPath)
+// fs.removeSync(projectPath)
 
 Object.keys(config.entry).forEach(chunk => {
   config.entry[chunk] = devClient.concat(chunk)
