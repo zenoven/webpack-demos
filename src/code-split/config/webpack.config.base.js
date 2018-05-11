@@ -42,7 +42,22 @@ const config = {
       }
 
     ]
-  }
+  },
+  resolve: {
+    alias: {
+      c: path.join(projectPath, 'libs'),
+      common: path.join(projectPath, 'common'),
+      components: path.join(projectPath, 'components'),
+      libs: path.join(projectPath, 'libs'),
+    },
+    modules: [
+      projectPath,
+      'libs',
+      'components',
+      'node_modules'
+    ],
+    extensions: ['.js', '.jsx', '.json', '.less']
+  },
 }
 
 export default config

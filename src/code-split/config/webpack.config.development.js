@@ -20,6 +20,7 @@ const config = Object.assign({}, baseConfig, {
   output: {
     filename: '[name].js',
     chunkFilename: '[chunkhash].js',
+    path: buildPath
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
