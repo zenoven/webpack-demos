@@ -2,10 +2,12 @@ import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import parseArgs from 'minimist'
 import path from 'path'
-import fs from 'fs'
+import fs from 'fs-extra'
 import yaml from 'js-yaml'
 import IP from 'dev-ip'
 import Promise from 'bluebird'
+
+Promise.promisifyAll(fs)
 
 const devIP = IP()[0]
 const root = path.join(__dirname, '../')
@@ -19,6 +21,8 @@ const {server: {devPort}} = appConfig
 
 const devClient = [`webpack-dev-server/client?http://${devIP}:${devPort}`]
 const publicPath = config.output.publicPath = `http://${devIP}:${devPort}/build/`
+
+fs.removeSync(projectPath)
 
 Object.keys(config.entry).forEach(chunk => {
   config.entry[chunk] = devClient.concat(chunk)
@@ -82,9 +86,6 @@ compiler.plugin('done', (stats) => {
   const outputPath = config.output.path
   const assets = stats.compilation.assets
 
-  console.log('assets:', Object.keys(assets))
-  console.log('Promise.map:', Promise.map)
-
   Promise.map(Object.keys(assets), (file) => {
     const asset = assets[file]
     const filePath = path.relative(outputPath, asset.existsAt)
@@ -93,7 +94,7 @@ compiler.plugin('done', (stats) => {
     if (path.extname(filePath) === '.html') {
       const content = asset.source()
       const distPath = path.join(projectPath, filePath)
-
+      console.log('distPath:', distPath)
       return fs.outputFileAsync(distPath, content)
     }
   }).then(() => {
