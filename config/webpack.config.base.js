@@ -1,7 +1,7 @@
 import path from 'path'
-const root = path.join(__dirname, '../../../')
-const projectPath = path.join(__dirname, '../')
-const buildPath = path.join(root, 'build', path.basename(projectPath) )
+const root = path.join(__dirname, '../')
+const srcPath = path.join(root, 'app')
+const buildPath = path.join(root, 'build' )
 const mode = process.env.NODE_ENV || 'development'
 
 const config = {
@@ -9,7 +9,7 @@ const config = {
   entry: {
     index: './index.js'
   },
-  context: projectPath,
+  context: srcPath,
   output: {
     filename: '[name].[chunkhash:22].js',
     chunkFilename: '[name].[chunkhash:22].js',
@@ -45,13 +45,13 @@ const config = {
   },
   resolve: {
     alias: {
-      c: path.join(projectPath, 'libs'),
-      common: path.join(projectPath, 'common'),
-      components: path.join(projectPath, 'components'),
-      libs: path.join(projectPath, 'libs'),
+      c: path.join(srcPath, 'libs'),
+      common: path.join(srcPath, 'common'),
+      components: path.join(srcPath, 'components'),
+      libs: path.join(srcPath, 'libs'),
     },
     modules: [
-      projectPath,
+      srcPath,
       'libs',
       'components',
       'node_modules'

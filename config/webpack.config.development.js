@@ -4,22 +4,22 @@ import CleanWebpackPlugin from 'clean-webpack-plugin'
 import path from 'path'
 import baseConfig from './webpack.config.base'
 import glob from 'glob'
-const root = path.join(__dirname, '../../../')
-const projectPath = path.join(__dirname, '../')
-const buildPath = path.join(root, 'build', path.basename(projectPath) )
+const root = path.join(__dirname, '../')
+const srcPath = path.join(root, 'app')
+const buildPath = path.join(root, 'build', path.basename(srcPath) )
 const mode = process.env.NODE_ENV || 'development'
 const isProduction = mode === 'production'
 
 let plugins = []
 let entry = {}
 
-glob.sync('pages/**/*.js', {cwd: projectPath})
+glob.sync('pages/**/*.js', {cwd: srcPath})
   .forEach( (file) => {
     let chunk = file.slice(0 , '.js'.length * -1)
     entry[chunk] = [`./${chunk}`]
   } )
 
-glob.sync('pages/**/*.html', {cwd: projectPath})
+glob.sync('pages/**/*.html', {cwd: srcPath})
   .forEach( (file) => {
     let chunk = file.slice(0, '.html'.length * -1)
     let chunkFile = `${chunk}.html`
@@ -42,10 +42,6 @@ const config = Object.assign({}, baseConfig, {
   mode: mode,
   entry: entry,
   devtool: 'source-map',
-  devServer: {
-    contentBase: buildPath,
-    host: '0.0.0.0',
-  },
   output: {
     pathinfo: true,
     filename: '[name].js',
