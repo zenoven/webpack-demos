@@ -15,14 +15,13 @@ const args = parseArgs(process.argv.slice(2))
 const project = args['project']
 const env = args['env'] || 'development'
 const projectPath = path.join(root, 'src', project)
+const buildPath = path.join(root, 'build', path.basename(projectPath) )
 const config = require(`${projectPath}/config/webpack.config.${env}.js`).default
 const appConfig = yaml.safeLoad(fs.readFileSync(`${projectPath}/config/app.yml`))
 const {server: {devPort}} = appConfig
 
 const devClient = [`webpack-dev-server/client?http://${devIP}:${devPort}`]
-const publicPath = config.output.publicPath = `http://${devIP}:${devPort}/build/`
-
-// fs.removeSync(projectPath)
+const publicPath = config.output.publicPath = `http://${devIP}:${devPort}/build/${path.basename(projectPath)}/`
 
 Object.keys(config.entry).forEach(chunk => {
   config.entry[chunk] = devClient.concat(chunk)
@@ -38,7 +37,7 @@ const server = new WebpackDevServer(compiler, {
   host: '0.0.0.0',
   compress: true,
   disableHostCheck: true,
-  contentBase: projectPath,
+  contentBase: path.join(buildPath, 'pages'),
   publicPath: publicPath,
   watchOptions: {
     aggregateTimeout: 300
@@ -90,11 +89,9 @@ compiler.plugin('done', (stats) => {
     const asset = assets[file]
     const filePath = path.relative(outputPath, asset.existsAt)
 
-    console.log('filePath:', filePath)
     if (path.extname(filePath) === '.html') {
       const content = asset.source()
-      const distPath = path.join(projectPath, filePath)
-      console.log('distPath:', distPath)
+      const distPath = path.join(buildPath, filePath)
       return fs.outputFileAsync(distPath, content)
     }
   }).then(() => {
