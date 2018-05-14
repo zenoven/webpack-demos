@@ -3,10 +3,10 @@ import WebpackDevServer from 'webpack-dev-server'
 import parseArgs from 'minimist'
 import path from 'path'
 import fs from 'fs-extra'
-import yaml from 'js-yaml'
+// import yaml from 'js-yaml'
 import IP from 'dev-ip'
 import Promise from 'bluebird'
-
+import appConfig from '../config/index'
 Promise.promisifyAll(fs)
 
 const devIP = IP()[0]
@@ -17,7 +17,7 @@ const srcPath = path.join(root, 'app')
 const buildPath = path.join(root, 'build')
 const configPath = path.join(root, `config/webpack.config.${env}.js`)
 const config = require(configPath).default
-const appConfig = yaml.safeLoad(fs.readFileSync(`${root}/config/app.yml`))
+// const appConfig = yaml.safeLoad(fs.readFileSync(`${root}/config/app.yml`))
 const {server: {devPort}} = appConfig
 
 const devClient = [`webpack-dev-server/client?http://${devIP}:${devPort}`]
