@@ -7,9 +7,9 @@ const index = async(ctx, next) => {
   } = ctx.query
   name = name || 'world'
   await ctx.render('pages/index', {
-    title: `hello, ${name}`,
+    title: `Hello, ${name}`,
   })
-  next()
+  await next()
 }
 
 index.path = '/'
