@@ -4,7 +4,7 @@ import KoaRouter from 'koa-router'
 import {type} from "./utils";
 
 const router = new KoaRouter({
-  prefix: '/api'
+  // prefix: '/api'
 })
 
 const controllersPath = path.join(__dirname, '../controllers')
