@@ -17,11 +17,8 @@ glob.sync('**/*.js', {
   let method = controller.method || 'all' // method可为数组，也可为string，甚至为空
   let pth = controller.path || `/${ctrPath}`
 
-  console.log('controller.method:', method)
-
   if(type(method) === 'array' && method.length) {
     method.forEach(m => {
-      console.log('m:', m)
       router[m](pth, controller)
     })
   }else{

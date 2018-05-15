@@ -15,6 +15,7 @@ const args = parseArgs(process.argv.slice(2))
 const env = args['env'] || 'development'
 const srcPath = path.join(root, 'app')
 const buildPath = path.join(root, 'build')
+const viewsPath = path.join(root, 'server/views')
 const configPath = path.join(root, `config/webpack.config.${env}.js`)
 const config = require(configPath).default
 // const appConfig = yaml.safeLoad(fs.readFileSync(`${root}/config/app.yml`))
@@ -22,6 +23,8 @@ const {server: {devPort}} = appConfig
 
 const devClient = [`webpack-dev-server/client?http://${devIP}:${devPort}`]
 const publicPath = config.output.publicPath = `http://${devIP}:${devPort}/build/`
+
+fs.removeSync(viewsPath)
 
 Object.keys(config.entry).forEach(chunk => {
   config.entry[chunk] = devClient.concat(chunk)
@@ -91,7 +94,7 @@ compiler.plugin('done', (stats) => {
 
     if (path.extname(filePath) === '.html') {
       const content = asset.source()
-      const distPath = path.join(buildPath, filePath)
+      const distPath = path.join(viewsPath, filePath)
       return fs.outputFileAsync(distPath, content)
     }
   }).then(() => {
