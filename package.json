@@ -32,6 +32,7 @@
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
+    "autoprefixer": "^8.5.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
@@ -43,6 +44,7 @@
     "bluebird": "^3.5.1",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^0.28.11",
+    "cssnano": "^3.10.0",
     "dev-ip": "^1.0.1",
     "extract-loader": "^2.0.1",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
@@ -57,6 +59,7 @@
     "minimist": "^1.2.0",
     "nodemon": "^1.17.4",
     "nunjucks-loader": "^3.0.0",
+    "postcss-import": "^11.1.0",
     "postcss-loader": "^2.1.5",
     "style-loader": "^0.20.3",
     "url-loader": "^1.0.1",
