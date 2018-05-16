@@ -122,10 +122,28 @@ const config = {
     new HappyPack({
       id: 'style',
       loaders: [
-        'style-loader',
-        'css-loader',
-        'less-loader',
-        'postcss-loader'
+        {
+          loader: 'css-loader',
+          options: {
+            sourceMap: true
+          }
+        },
+        {
+          loader: 'postcss-loader',
+          options: {
+            plugins: (loader) => [
+              require('postcss-import')({root: loader.resourcePath}),
+              require('autoprefixer')(), //CSS浏览器兼容
+              require('cssnano')()  //压缩css
+            ]
+          }
+        },
+        {
+          loader: 'less-loader',
+          options: {
+            sourceMap: true
+          }
+        }
       ],
       threadPool: happyThreadPool
     }),
