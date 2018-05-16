@@ -4,6 +4,7 @@ import path from 'path'
 import HTMLWebpackPlugin from "html-webpack-plugin"
 import glob from 'glob'
 import HappyPack from 'happypack'
+import os from 'os'
 
 const root = path.join(__dirname, '../')
 const srcPath = path.join(root, 'app')
@@ -12,6 +13,7 @@ const mode = process.env.NODE_ENV || 'development'
 const isProduction = mode === 'production'
 const entry = {}
 const plugins = []
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
 glob.sync('pages/**/*.js', {cwd: srcPath})
   .forEach( (filePath) => {
@@ -58,27 +60,37 @@ const config = {
       },
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader'
-        ]
+        use: 'happypack/loader?id=css'
       },
       {
         test: /\.less$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'less-loader',
-          'postcss-loader'
-        ]
+        use: 'happypack/loader?id=less'
       }
-
     ]
   },
   plugins: [
     new HappyPack({
       id: 'js',
-      loaders: [ 'babel-loader' ]
+      loaders: [ 'babel-loader' ],
+      threadPool: happyThreadPool
+    }),
+    new HappyPack({
+      id: 'css',
+      loaders: [
+        'style-loader',
+        'css-loader'
+      ],
+      threadPool: happyThreadPool
+    }),
+    new HappyPack({
+      id: 'less',
+      loaders: [
+        'style-loader',
+        'css-loader',
+        'less-loader',
+        'postcss-loader'
+      ],
+      threadPool: happyThreadPool
     }),
     new webpack.HotModuleReplacementPlugin(),
     new CleanWebpackPlugin(buildPath, {
