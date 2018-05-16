@@ -1,18 +1,23 @@
 import webpack from 'webpack'
 import CleanWebpackPlugin from 'clean-webpack-plugin'
 import path from 'path'
-import baseConfig from './webpack.config.base'
 import HTMLWebpackPlugin from "html-webpack-plugin"
 import glob from 'glob'
+import HappyPack from 'happypack'
 
 const root = path.join(__dirname, '../')
 const srcPath = path.join(root, 'app')
 const buildPath = path.join(root, 'build', path.basename(srcPath) )
 const mode = process.env.NODE_ENV || 'development'
-const entry = baseConfig.entry
 const isProduction = mode === 'production'
-
+const entry = {}
 const plugins = []
+
+glob.sync('pages/**/*.js', {cwd: srcPath})
+  .forEach( (filePath) => {
+    let chunk = filePath.slice(0 , path.extname(filePath).length * -1)
+    entry[chunk] = [`./${chunk}`]
+  } )
 
 glob.sync('pages/**/*.html', {cwd: srcPath})
   .forEach( (filePath) => {
@@ -33,8 +38,10 @@ glob.sync('pages/**/*.html', {cwd: srcPath})
     }))
   })
 
-const config = Object.assign({}, baseConfig, {
+const config = {
   mode: mode,
+  entry: entry,
+  context: srcPath,
   devtool: 'source-map',
   output: {
     pathinfo: true,
@@ -42,12 +49,57 @@ const config = Object.assign({}, baseConfig, {
     chunkFilename: '[chunkhash].js',
     path: buildPath
   },
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: 'happypack/loader?id=js'
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          'less-loader',
+          'postcss-loader'
+        ]
+      }
+
+    ]
+  },
   plugins: [
+    new HappyPack({
+      id: 'js',
+      loaders: [ 'babel-loader' ]
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new CleanWebpackPlugin(buildPath, {
       root: root
     }),
-  ].concat(plugins)
-})
+  ].concat(plugins),
+  resolve: {
+    alias: {
+      c: path.join(srcPath, 'libs'),
+      common: path.join(srcPath, 'common'),
+      components: path.join(srcPath, 'components'),
+      libs: path.join(srcPath, 'libs'),
+    },
+    modules: [
+      srcPath,
+      'libs',
+      'components',
+      'node_modules'
+    ],
+    extensions: ['.js', '.jsx', '.json', '.less']
+  }
+}
 
 export default config
