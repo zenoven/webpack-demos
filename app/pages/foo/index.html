@@ -9,7 +9,14 @@
 </head>
 <body>
 <div class="main">
-  hello, foobar is here
+<ul class="cnodejs-topics">
+  {% for item in topics %}
+  <li data-id="{{item.id}}">
+    <h3 class="title">{{item.title | safe}}</h3>
+    <p>{{item.content | safe}}</p>
+  </li>
+  {% endfor %}
+</ul>
 </div>
 </body>
 </html>

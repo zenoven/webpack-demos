@@ -4,7 +4,7 @@
 import axios from 'axios'
 
 const defaults = {
-  baseURL: '/api',
+  // baseURL: '/api',
   timeout: 10000,
 }
 export default async(ctx, next) => {
