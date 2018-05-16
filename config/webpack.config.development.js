@@ -14,18 +14,20 @@ let plugins = []
 let entry = {}
 
 glob.sync('pages/**/*.js', {cwd: srcPath})
-  .forEach( (file) => {
-    let chunk = file.slice(0 , '.js'.length * -1)
+  .forEach( (filePath) => {
+    let chunk = filePath.slice(0 , path.extname(filePath).length * -1)
     entry[chunk] = [`./${chunk}`]
   } )
 
 glob.sync('pages/**/*.html', {cwd: srcPath})
-  .forEach( (file) => {
-    let chunk = file.slice(0, '.html'.length * -1)
-    let chunkFile = `${chunk}.html`
+  .forEach( (filePath) => {
+    let chunk = filePath.slice(0, path.extname(filePath).length * -1)
+
+    console.log(entry[chunk] ? [ chunk ] : false)
+
     plugins.push(new HTMLWebpackPlugin({
-      filename: file,
-      template: file,
+      filename: filePath,
+      template: filePath,
       minify: !isProduction ? false : {
         removeAttributeQuotes: true,
         collapseWhitespace: true,
@@ -34,7 +36,7 @@ glob.sync('pages/**/*.html', {cwd: srcPath})
         removeComments: true,
         removeEmptyAttributes: true,
       },
-      chunks: entry[chunk] ? [ chunk ] : false
+      chunks: entry[chunk] ? [ chunk ] : []
     }))
   })
 
