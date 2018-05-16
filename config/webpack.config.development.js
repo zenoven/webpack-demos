@@ -5,6 +5,7 @@ import HTMLWebpackPlugin from "html-webpack-plugin"
 import glob from 'glob'
 import HappyPack from 'happypack'
 import os from 'os'
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
 const root = path.join(__dirname, '../')
 const srcPath = path.join(root, 'app')
@@ -56,15 +57,59 @@ const config = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: 'happypack/loader?id=js'
+        loader: 'happypack/loader',
+        options: {
+          id: 'js'
+        }
       },
       {
-        test: /\.css$/,
-        use: 'happypack/loader?id=css'
+        test: /\.(less|css)$/,
+        loader: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'happypack/loader',
+              options: {
+                id: 'style'
+              }
+            }
+          ]
+        })
       },
       {
-        test: /\.less$/,
-        use: 'happypack/loader?id=less'
+        oneOf: [
+          {
+            test: /\.html/,
+            resourceQuery: /\?.*/,
+            use: [
+              'nunjucks-loader',
+              'extract-loader',
+              'html-loader'
+            ]
+          },
+          {
+            test: /\.html$/,
+            use: [
+              'html-loader'
+            ]
+          }
+        ]
+      },
+      {
+        oneOf: [
+          {
+            test: /\.(gif|png|jpg|jpeg|eot|ttf|svg|woff)/,
+            resourceQuery: /\?.*/,
+            loader: 'url-loader'
+          },
+          {
+            test: /\.(gif|png|jpg|jpeg|eot|ttf|svg|woff)$/,
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]'
+            }
+          }
+        ]
       }
     ]
   },
@@ -75,15 +120,7 @@ const config = {
       threadPool: happyThreadPool
     }),
     new HappyPack({
-      id: 'css',
-      loaders: [
-        'style-loader',
-        'css-loader'
-      ],
-      threadPool: happyThreadPool
-    }),
-    new HappyPack({
-      id: 'less',
+      id: 'style',
       loaders: [
         'style-loader',
         'css-loader',
@@ -95,6 +132,10 @@ const config = {
     new webpack.HotModuleReplacementPlugin(),
     new CleanWebpackPlugin(buildPath, {
       root: root
+    }),
+    new ExtractTextPlugin({
+      allChunks: true,
+      filename: '[name].css'
     }),
   ].concat(plugins),
   resolve: {
