@@ -3,22 +3,19 @@ import WebpackDevServer from 'webpack-dev-server'
 import parseArgs from 'minimist'
 import path from 'path'
 import fs from 'fs-extra'
-// import yaml from 'js-yaml'
 import IP from 'dev-ip'
 import Promise from 'bluebird'
 import appConfig from '../config/index'
+
 Promise.promisifyAll(fs)
 
 const devIP = IP()[0]
 const root = path.join(__dirname, '../')
 const args = parseArgs(process.argv.slice(2))
 const env = args['env'] || 'development'
-const srcPath = path.join(root, 'app')
-const buildPath = path.join(root, 'build')
 const viewsPath = path.join(root, 'server/views')
 const configPath = path.join(root, `config/webpack.config.${env}.js`)
 const config = require(configPath).default
-// const appConfig = yaml.safeLoad(fs.readFileSync(`${root}/config/app.yml`))
 const {server: {devPort}} = appConfig
 
 const devClient = [`webpack-dev-server/client?http://${devIP}:${devPort}`]
@@ -35,12 +32,11 @@ const compiler = webpack(config)
 const server = new WebpackDevServer(compiler, {
   quiet: true,
   noInfo: true,
-  hot: true,
+  // hot: true,
   inline: true,
   host: '0.0.0.0',
   compress: true,
   disableHostCheck: true,
-  // contentBase: path.join(buildPath, 'pages'),
   publicPath: publicPath,
   watchOptions: {
     aggregateTimeout: 300

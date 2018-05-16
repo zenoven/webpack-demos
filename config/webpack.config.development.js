@@ -1,29 +1,22 @@
 import webpack from 'webpack'
-import HTMLWebpackPlugin from 'html-webpack-plugin'
 import CleanWebpackPlugin from 'clean-webpack-plugin'
 import path from 'path'
 import baseConfig from './webpack.config.base'
+import HTMLWebpackPlugin from "html-webpack-plugin"
 import glob from 'glob'
+
 const root = path.join(__dirname, '../')
 const srcPath = path.join(root, 'app')
 const buildPath = path.join(root, 'build', path.basename(srcPath) )
 const mode = process.env.NODE_ENV || 'development'
+const entry = baseConfig.entry
 const isProduction = mode === 'production'
 
-let plugins = []
-let entry = {}
-
-glob.sync('pages/**/*.js', {cwd: srcPath})
-  .forEach( (filePath) => {
-    let chunk = filePath.slice(0 , path.extname(filePath).length * -1)
-    entry[chunk] = [`./${chunk}`]
-  } )
+const plugins = []
 
 glob.sync('pages/**/*.html', {cwd: srcPath})
   .forEach( (filePath) => {
     let chunk = filePath.slice(0, path.extname(filePath).length * -1)
-
-    console.log(entry[chunk] ? [ chunk ] : false)
 
     plugins.push(new HTMLWebpackPlugin({
       filename: filePath,
@@ -42,7 +35,6 @@ glob.sync('pages/**/*.html', {cwd: srcPath})
 
 const config = Object.assign({}, baseConfig, {
   mode: mode,
-  entry: entry,
   devtool: 'source-map',
   output: {
     pathinfo: true,

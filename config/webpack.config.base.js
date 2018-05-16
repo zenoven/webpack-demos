@@ -1,14 +1,23 @@
 import path from 'path'
+import glob from 'glob'
+
 const root = path.join(__dirname, '../')
 const srcPath = path.join(root, 'app')
 const buildPath = path.join(root, 'build' )
 const mode = process.env.NODE_ENV || 'development'
 
+let plugins = []
+let entry = {}
+
+glob.sync('pages/**/*.js', {cwd: srcPath})
+  .forEach( (filePath) => {
+    let chunk = filePath.slice(0 , path.extname(filePath).length * -1)
+    entry[chunk] = [`./${chunk}`]
+  } )
+
 const config = {
   mode: mode,
-  entry: {
-    index: './index.js'
-  },
+  entry: entry,
   context: srcPath,
   output: {
     filename: '[name].[chunkhash:22].js',
