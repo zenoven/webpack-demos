@@ -11,6 +11,7 @@ Promise.promisifyAll(fs)
 const devIP = IP()[0]
 const root = path.join(__dirname, '../')
 const env = process.env.NODE_ENV || 'development'
+const distPath = path.join(root, 'dist')
 const viewsPath = path.join(root, 'server/views')
 const configPath = path.join(root, `config/webpack.config.${env}.js`)
 const config = require(configPath).default
@@ -84,12 +85,14 @@ compiler.plugin('done', (stats) => {
 
   Promise.map(Object.keys(assets), (file) => {
     const asset = assets[file]
-    const filePath = path.relative(outputPath, asset.existsAt)
+    const filePath = path.relative(path.join(distPath, 'client/views'), asset.existsAt)
 
     if (path.extname(filePath) === '.html') {
+      console.log('asset.existsAt:', asset.existsAt)
+      console.log('filePath:', filePath)
       const content = asset.source()
-      const distPath = path.join(viewsPath, filePath)
-      return fs.outputFileAsync(distPath, content)
+      const targetPath = path.join(viewsPath, filePath)
+      return fs.outputFileAsync(targetPath, content)
     }
   }).then(() => {
     console.log(`webpack build success in ${time.toFixed(2)} s`)
