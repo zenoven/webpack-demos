@@ -10,8 +10,9 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin'
 const root = path.join(__dirname, '../')
 const srcPath = path.join(root, 'app')
 const buildPath = path.join(root, 'build', path.basename(srcPath) )
-const mode = process.env.NODE_ENV || 'development'
-const isProduction = mode === 'production'
+const env = process.env.NODE_ENV || 'development'
+// webpack 4 mode只有 production/development/none 其他取值会报错
+const mode = env === 'production' ? 'production' : 'development'
 const entry = {}
 const plugins = []
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
@@ -29,14 +30,7 @@ glob.sync('pages/**/*.html', {cwd: srcPath})
     plugins.push(new HTMLWebpackPlugin({
       filename: filePath,
       template: filePath,
-      minify: !isProduction ? false : {
-        removeAttributeQuotes: true,
-        collapseWhitespace: true,
-        html5: true,
-        minifyCSS: true,
-        removeComments: true,
-        removeEmptyAttributes: true,
-      },
+      minify: false,
       chunks: entry[chunk] ? [ chunk ] : []
     }))
   })
@@ -117,7 +111,9 @@ const config = {
     new HappyPack({
       id: 'js',
       loaders: [ 'babel-loader' ],
-      threadPool: happyThreadPool
+      threadPool: happyThreadPool,
+      verbose: true,
+      verboseWhenProfiling: true
     }),
     new HappyPack({
       id: 'style',
@@ -130,26 +126,34 @@ const config = {
         },
         {
           loader: 'postcss-loader',
-          options: {
-            config: {
-              ctx: {
-                cssnext: {},
-                cssnano: {},
-                autoprefixer: {}
-              }
-            }
-          }
+          // options: {
+          //   config: {
+          //     ctx: {
+          //       cssnext: {},
+          //       cssnano: {},
+          //       autoprefixer: {}
+          //     }
+          //   }
+          // }
         },
         {
           loader: 'less-loader',
           options: {
             sourceMap: true
-          }
+          },
         }
       ],
-      threadPool: happyThreadPool
+      threadPool: happyThreadPool,
+      verbose: true,
+      verboseWhenProfiling: true
     }),
     new webpack.HotModuleReplacementPlugin(),
+    // no more useful in webpack 4 as webpack set NODE_ENV automatically with mode
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     NODE_ENV: JSON.stringify(env)
+    //   }
+    // }),
     new CleanWebpackPlugin(buildPath, {
       root: root
     }),
@@ -158,6 +162,7 @@ const config = {
       filename: '[name].css'
     }),
   ].concat(plugins),
+
   resolve: {
     alias: {
       c: path.join(srcPath, 'libs'),

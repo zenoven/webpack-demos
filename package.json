@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "npm run server & npm run dev",
+    "start": "npm run dev",
     "dev": "babel-node scripts/server.js",
     "server": "nodemon -w server -w config -x babel-node server/index.js",
     "build": "babel-node scripts/build.js"

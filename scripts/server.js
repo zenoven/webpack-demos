@@ -1,6 +1,5 @@
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
-import parseArgs from 'minimist'
 import path from 'path'
 import fs from 'fs-extra'
 import IP from 'dev-ip'
@@ -11,8 +10,7 @@ Promise.promisifyAll(fs)
 
 const devIP = IP()[0]
 const root = path.join(__dirname, '../')
-const args = parseArgs(process.argv.slice(2))
-const env = args['env'] || 'development'
+const env = process.env.NODE_ENV || 'development'
 const viewsPath = path.join(root, 'server/views')
 const configPath = path.join(root, `config/webpack.config.${env}.js`)
 const config = require(configPath).default
@@ -32,7 +30,7 @@ const compiler = webpack(config)
 const server = new WebpackDevServer(compiler, {
   quiet: true,
   noInfo: true,
-  // hot: true,
+  // hot: true, // 需注释掉，否则热更新反而不管用
   inline: true,
   host: '0.0.0.0',
   compress: true,
