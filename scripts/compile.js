@@ -24,8 +24,8 @@ console.log(`start compiling with env:${env}`)
 
 const devIP = IP()[0]
 const root = path.join(__dirname, '../')
-const appPath = path.join(root, 'app')
-const buildPath = path.join(root, 'build')
+const appPath = path.join(root, 'client')
+const distPath = path.join(root, 'dist')
 const viewsPath = path.join(root, 'server/views')
 const configPath = path.join(root, `config/webpack.config.${env}.js`)
 const config = require(configPath).default
@@ -37,22 +37,22 @@ Promise
   .then(() => {
     // 文件清理
     return Promise.all([
-      fs.removeAsync('buildPath'),
+      fs.removeAsync('distPath'),
       fs.removeAsync('viewsPath')
     ])
   })
   .then(() => {
     console.log('transforming server side code...')
-    return execa.shell(`babel server -d server-build`).then(result => {
+    return execa.shell(`babel server -d build/server`).then(result => {
       console.log(result.stdout)
     })
   })
   .then(() => {
     // build
     console.log('webpack building client side code...')
-    
+
     if(env === 'development') {
-      config.output.publicPath = `http://${devIP}:${devPort}/build/`
+      config.output.publicPath = `http://${devIP}:${devPort}/dist/`
     }
     return new Promise((resolve, reject) => {
       webpack(config, (err, stats) => {

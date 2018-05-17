@@ -17,7 +17,7 @@ const config = require(configPath).default
 const {server: {devPort}} = appConfig
 
 const devClient = [`webpack-dev-server/client?http://${devIP}:${devPort}`]
-const publicPath = config.output.publicPath = `http://${devIP}:${devPort}/build/`
+const publicPath = config.output.publicPath = `http://${devIP}:${devPort}/dist/`
 
 fs.removeSync(viewsPath)
 
@@ -45,7 +45,7 @@ const server = new WebpackDevServer(compiler, {
     'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
   },
   proxy: {
-    '/build': {
+    '/dist': {
       target: `http://${devIP}:${devPort}/`,
       rewrite: (req) => {
         console.log('req:', req)
@@ -103,8 +103,8 @@ server.listen(devPort, () => {
 
 /***
  *
- * publicPath  /build/
- * proxy  /build =>   webpack-dev-server
+ * publicPath  /dist/
+ * proxy  /dist =>   webpack-dev-server
  * `webpack-dev-server/client?http://${devIP}:${devPort}`
  *
  *

@@ -8,8 +8,8 @@ import os from 'os'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 
 const root = path.join(__dirname, '../')
-const srcPath = path.join(root, 'app')
-const buildPath = path.join(root, 'build', path.basename(srcPath) )
+const srcPath = path.join(root, 'client')
+const distPath = path.join(root, 'dist/client')
 const env = process.env.NODE_ENV || 'development'
 // webpack 4 mode只有 production/development/none 其他取值会报错
 const mode = env === 'production' ? 'production' : 'development'
@@ -44,7 +44,7 @@ const config = {
     pathinfo: true,
     filename: '[name].js',
     chunkFilename: '[chunkhash].js',
-    path: buildPath
+    path: distPath
   },
   module: {
     rules: [
@@ -154,7 +154,7 @@ const config = {
     //     NODE_ENV: JSON.stringify(env)
     //   }
     // }),
-    new CleanWebpackPlugin(buildPath, {
+    new CleanWebpackPlugin(distPath, {
       root: root
     }),
     new ExtractTextPlugin({

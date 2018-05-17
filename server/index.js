@@ -11,5 +11,5 @@ app.use(router.routes())
 app.use(router.allowedMethods())
 
 app.listen(appConfig.server.port, () => {
-  console.log('server started')
+  console.log('koa2 server started')
 })
