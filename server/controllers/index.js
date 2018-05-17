@@ -6,7 +6,7 @@ const index = async(ctx, next) => {
     name
   } = ctx.query
   name = name || 'world'
-  await ctx.render('pages/index', {
+  await ctx.render('index', {
     title: `Hello, ${name}`,
   })
   await next()

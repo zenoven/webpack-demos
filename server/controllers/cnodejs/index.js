@@ -20,7 +20,7 @@ const index = async(ctx, next) => {
         throw e
       })
 
-    await ctx.render('pages/foo/index.html', {
+    await ctx.render('foo/index.html', {
       topics
     })
 

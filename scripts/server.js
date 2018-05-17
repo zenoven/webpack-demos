@@ -88,8 +88,6 @@ compiler.plugin('done', (stats) => {
     const filePath = path.relative(path.join(distPath, 'client/views'), asset.existsAt)
 
     if (path.extname(filePath) === '.html') {
-      console.log('asset.existsAt:', asset.existsAt)
-      console.log('filePath:', filePath)
       const content = asset.source()
       const targetPath = path.join(viewsPath, filePath)
       return fs.outputFileAsync(targetPath, content)

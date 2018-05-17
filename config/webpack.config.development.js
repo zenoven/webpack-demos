@@ -126,15 +126,15 @@ const config = {
         },
         {
           loader: 'postcss-loader',
-          // options: {
-          //   config: {
-          //     ctx: {
-          //       cssnext: {},
-          //       cssnano: {},
-          //       autoprefixer: {}
-          //     }
-          //   }
-          // }
+          options: {
+            config: {
+              ctx: {
+                cssnext: {},
+                cssnano: {},
+                autoprefixer: {}
+              }
+            }
+          }
         },
         {
           loader: 'less-loader',
