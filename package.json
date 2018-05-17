@@ -7,7 +7,7 @@
     "start": "npm run server & npm run dev",
     "dev": "babel-node scripts/server.js",
     "server": "nodemon -w server -w config -x babel-node server/index.js",
-    "build": "babel-node scripts/build.js"
+    "compile": "babel-node scripts/compile.js"
   },
   "repository": {
     "type": "git",
@@ -46,6 +46,7 @@
     "css-loader": "^0.28.11",
     "cssnano": "^3.10.0",
     "dev-ip": "^1.0.1",
+    "execa": "^0.10.0",
     "extract-loader": "^2.0.1",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
