@@ -8,6 +8,7 @@ import IP from 'dev-ip'
 import Promise from 'bluebird'
 import appConfig from '../config/index'
 import execa from 'execa'
+import glob from 'glob'
 // import babel from 'babel-core'
 
 Promise.promisifyAll(fs)
@@ -24,26 +25,23 @@ console.log(`start compiling with env:${env}`)
 
 const devIP = IP()[0]
 const root = path.join(__dirname, '../')
-const appPath = path.join(root, 'client')
 const distPath = path.join(root, 'dist')
-const viewsPath = path.join(root, 'server/views')
 const configPath = path.join(root, `config/webpack.config.${env}.js`)
 const config = require(configPath).default
 const {server: {devPort}} = appConfig
 
-
+let start = Date.now()
 Promise
   .resolve()
   .then(() => {
     // 文件清理
     return Promise.all([
-      fs.removeAsync('distPath'),
-      fs.removeAsync('viewsPath')
+      fs.removeAsync(distPath),
     ])
   })
   .then(() => {
     console.log('transforming server side code...')
-    return execa.shell(`babel server -d build/server`).then(result => {
+    return execa.shell(`babel server -d dist/server`).then(result => {
       console.log(result.stdout)
     })
   })
@@ -77,3 +75,21 @@ Promise
       })
     })
   })
+  .then(() => {
+    console.log('moving views...')
+    let views = glob.sync('**/*.html', {
+      cwd: path.join(distPath, '/client/')
+    })
+
+    return Promise.map(views, (filePath) => {
+      let src = path.join(distPath, '/client', filePath)
+      let dist = path.join(distPath, '/server', filePath)
+      console.log('src:', src)
+      console.log('dist:', dist)
+      return fs.moveAsync(src, dist)
+    })
+
+  }).then(() => {
+    let duration = (Date.now() - start)/1000
+    console.log(`compile process done in ${duration.toFixed(2)}s`)
+})

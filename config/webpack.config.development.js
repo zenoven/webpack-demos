@@ -17,13 +17,13 @@ const entry = {}
 const plugins = []
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
-glob.sync('pages/**/*.js', {cwd: srcPath})
+glob.sync('views/**/*.js', {cwd: srcPath})
   .forEach( (filePath) => {
     let chunk = filePath.slice(0 , path.extname(filePath).length * -1)
     entry[chunk] = [`./${chunk}`]
   } )
 
-glob.sync('pages/**/*.html', {cwd: srcPath})
+glob.sync('views/**/*.html', {cwd: srcPath})
   .forEach( (filePath) => {
     let chunk = filePath.slice(0, path.extname(filePath).length * -1)
 
