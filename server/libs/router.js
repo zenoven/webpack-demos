@@ -13,7 +13,7 @@ glob.sync('**/*.js', {
   cwd: controllersPath
 }).forEach( (ctrPath) => {
   ctrPath = ctrPath.replace(/([\/\\]?index)?\.js$/, '')
-  let controller = require(path.join(controllersPath, ctrPath)).default
+  let controller = require(path.join(controllersPath, ctrPath))
   let method = controller.method || 'all' // method可为数组，也可为string，甚至为空
   let pth = controller.path || `/${ctrPath}`
 

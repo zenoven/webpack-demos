@@ -14,7 +14,7 @@ const env = process.env.NODE_ENV || 'development'
 const distPath = path.join(root, 'dist')
 const viewsPath = path.join(root, 'server/views')
 const configPath = path.join(root, `config/webpack.config.${env}.js`)
-const config = require(configPath).default
+const config = require(configPath)
 const {server: {devPort}} = appConfig
 
 const devClient = [`webpack-dev-server/client?http://${devIP}:${devPort}`]

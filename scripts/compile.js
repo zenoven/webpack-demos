@@ -27,7 +27,7 @@ const devIP = IP()[0]
 const root = path.join(__dirname, '../')
 const distPath = path.join(root, 'dist')
 const configPath = path.join(root, `config/webpack.config.${env}.js`)
-const config = require(configPath).default
+const config = require(configPath)
 const {server: {devPort}} = appConfig
 
 let start = Date.now()

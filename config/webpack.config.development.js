@@ -148,12 +148,6 @@ const config = {
       verboseWhenProfiling: true
     }),
     new webpack.HotModuleReplacementPlugin(),
-    // no more useful in webpack 4 as webpack set NODE_ENV automatically with mode
-    // new webpack.DefinePlugin({
-    //   'process.env': {
-    //     NODE_ENV: JSON.stringify(env)
-    //   }
-    // }),
     new CleanWebpackPlugin(distPath, {
       root: root
     }),
