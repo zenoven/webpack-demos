@@ -3,6 +3,8 @@
  */
 import styles from './index.less'
 
+let openCamera = false
+
 function getUserMedia(constrants){
   if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
@@ -25,7 +27,7 @@ function delay(duration){
     setTimeout(resolve, duration)
   })
 }
-getUserMedia.isNewAPI = navigator.mediaDevices && navigator.mediaDevices.getUserMedia
+getUserMedia.isNewAPI = !! (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
 
 document.addEventListener('DOMContentLoaded', function(){
   let video = document.getElementById("video");
@@ -42,14 +44,18 @@ document.addEventListener('DOMContentLoaded', function(){
 
   delay(3000)
     .then(() => {
-      return getUserMedia({
-        video: getUserMedia.isNewAPI ? {
-          facingMode: 'environment'
-          // facingMode: 'environment'
-        } : true
-      })
+      return openCamera ?
+        getUserMedia({
+          video: getUserMedia.isNewAPI ? {
+            facingMode: 'environment'
+            // facingMode: 'environment'
+          } : true
+        })
+        :
+        false
     })
     .then(stream => {
+      if(!stream) return
       try {
         // 微信
         // Error: 很抱歉,您的浏览器不支持此功能
