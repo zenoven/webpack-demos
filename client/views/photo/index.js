@@ -3,33 +3,23 @@
  */
 import styles from './index.less'
 
-let config = {video: true}
-function getUserMedia(constrains){
+function getUserMedia(constrants){
+  if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+
+    return navigator.mediaDevices.getUserMedia(constrants)
+  }
+
+  let getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
+  if(!getUserMedia) {
+    return Promise.reject(new Error('很抱歉,您的浏览器不支持此功能'))
+  }
+
   return new Promise((resolve, reject) => {
-    if(navigator.mediaDevices.getUserMedia){
-      //最新标准API
-      alert('最新标准API')
-      console.log('最新标准API')
-      navigator.mediaDevices.getUserMedia(constrains).then(resolve).catch(reject);
-    } else if (navigator.webkitGetUserMedia){
-      //webkit内核浏览器
-      alert('webkit内核浏览器')
-      console.log('webkit内核浏览器')
-      navigator.webkitGetUserMedia(constrains).then(resolve).catch(reject);
-    } else if (navigator.mozGetUserMedia){
-      //Firefox浏览器
-      alert('Firefox浏览器')
-      console.log('Firefox浏览器')
-      navagator.mozGetUserMedia(constrains).then(resolve).catch(reject);
-    } else if (navigator.getUserMedia){
-      //旧版API
-      alert('旧版API')
-      console.log('旧版API')
-      navigator.getUserMedia(constrains, resolve, reject);
-    }
+    getUserMedia.call(navigator, constrants, resolve, reject)
   })
 
 }
+getUserMedia.isNewAPI = navigator.mediaDevices && navigator.mediaDevices.getUserMedia
 
 document.addEventListener('DOMContentLoaded', function(){
   let video = document.getElementById("video");
@@ -42,12 +32,21 @@ document.addEventListener('DOMContentLoaded', function(){
     context.drawImage(video,0,0,480,320);
   });
 
-  console.log(getUserMedia)
+  console.log(getUserMedia.isNewAPI)
 
-  getUserMedia(config)
+  getUserMedia({
+    video: getUserMedia.isNewAPI ? {
+      facingMode: 'user'
+      // facingMode: 'environment'
+    } : true
+  })
     .then(stream => {
-      // debugger
-      video.src = (window.URL || window.webkitURL).createObjectURL(stream)
+      // Safari
+      if(typeof video.srcObject !== 'undefined'){
+        video.srcObject = stream
+      }else{
+        video.src = (window.URL || window.webkitURL).createObjectURL(stream)
+      }
       video.play()
     })
     .catch(err => {
