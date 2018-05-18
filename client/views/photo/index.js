@@ -19,6 +19,12 @@ function getUserMedia(constrants){
   })
 
 }
+
+function delay(duration){
+  return new Promise((resolve, reject) => {
+    setTimeout(resolve, duration)
+  })
+}
 getUserMedia.isNewAPI = navigator.mediaDevices && navigator.mediaDevices.getUserMedia
 
 document.addEventListener('DOMContentLoaded', function(){
@@ -34,20 +40,30 @@ document.addEventListener('DOMContentLoaded', function(){
 
   console.log(getUserMedia.isNewAPI)
 
-  getUserMedia({
-    video: getUserMedia.isNewAPI ? {
-      facingMode: 'user'
-      // facingMode: 'environment'
-    } : true
-  })
+  delay(3000)
+    .then(() => {
+      return getUserMedia({
+        video: getUserMedia.isNewAPI ? {
+          facingMode: 'environment'
+          // facingMode: 'environment'
+        } : true
+      })
+    })
     .then(stream => {
-      // Safari
-      if(typeof video.srcObject !== 'undefined'){
-        video.srcObject = stream
-      }else{
-        video.src = (window.URL || window.webkitURL).createObjectURL(stream)
+      try {
+        // 微信
+        // Error: 很抱歉,您的浏览器不支持此功能
+        // Safari 11
+        // NotAllowedError: The request is not allowed by the user agent or the platform in the current context, possibly because the user denied permission.
+        if(typeof video.srcObject !== 'undefined'){  // 兼容Safari
+          video.srcObject = stream
+        }else{
+          video.src = (window.URL || window.webkitURL).createObjectURL(stream)
+        }
+        video.play()
+      }catch(e){
+        alert(e)
       }
-      video.play()
     })
     .catch(err => {
       console.log(err)
