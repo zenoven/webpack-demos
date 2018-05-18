@@ -7,7 +7,8 @@
     "start": "npm run server & npm run dev",
     "dev": "babel-node scripts/server.js",
     "server": "nodemon -w server -w config -x babel-node server/index.js",
-    "compile": "babel-node scripts/compile.js"
+    "compile": "babel-node scripts/compile.js",
+    "kill": "lsof -i:3000 | grep node | awk '{ print $2 }' | xargs kill"
   },
   "repository": {
     "type": "git",

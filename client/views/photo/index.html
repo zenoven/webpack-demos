@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>{{title}}</title>
+</head>
+<body>
+<h2>{{title}}</h2>
+
+<h3>方法1: input type=file</h3>
+
+<ul>
+  <li>
+    <input type="file" accept="image/*" capture="camera" /> <label>capture="camera"</label>
+  </li>
+  <li>
+    <input type="file" accept="image/*" capture="video" /> <label>capture="video"</label>
+  </li>
+  <li>
+    <input type="file" accept="image/*" capture="microphone" /> <label>capture="microphone"</label>
+  </li>
+  <li>
+    <input type="file" accept="image/*" capture="camcorder" /> <label>capture="camcorder"</label>
+  </li>
+  <li>
+    <input type="file" accept="image/*" capture /> <label>capture with no value</label>
+  </li>
+</ul>
+
+<h3>方法2: getUserMedia API</h3>
+
+<video id="video" autoplay style="width: 480px;height: 320px"></video>
+<canvas id="canvas" width="480" height="320"></canvas>
+<button id="capture">拍照</button>
+</body>
+</html>
