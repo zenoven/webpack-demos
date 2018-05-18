@@ -84,12 +84,15 @@ Promise
     return Promise.map(views, (filePath) => {
       let src = path.join(distPath, '/client', filePath)
       let dist = path.join(distPath, '/server', filePath)
-      console.log('src:', src)
-      console.log('dist:', dist)
       return fs.moveAsync(src, dist)
     })
 
-  }).then(() => {
+  })
+  .then(() => {
     let duration = (Date.now() - start)/1000
-    console.log(`compile process done in ${duration.toFixed(2)}s`)
-})
+    console.log(`compile done in ${duration.toFixed(2)}s`)
+  })
+  .catch(e => {
+    console.log(e)
+    process.exit(1)
+  })
