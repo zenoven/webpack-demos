@@ -3,8 +3,6 @@
  */
 import styles from './index.less'
 
-let openCamera = false
-
 function getUserMedia(constrants){
   if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 
@@ -42,19 +40,14 @@ document.addEventListener('DOMContentLoaded', function(){
 
   console.log(getUserMedia.isNewAPI)
 
-  delay(3000)
-    .then(() => {
-      return openCamera ?
-        getUserMedia({
-          video: getUserMedia.isNewAPI ? {
-            facingMode: 'environment'
-            // facingMode: 'environment'
-          } : true
-        })
-        :
-        false
-    })
-    .then(stream => {
+  document.getElementById('start').addEventListener('click', () => {
+
+    getUserMedia({
+      video: getUserMedia.isNewAPI ? {
+        facingMode: 'environment'
+        // facingMode: 'environment'
+      } : true
+    }).then(stream => {
       if(!stream) return
       try {
         // 微信
@@ -71,8 +64,13 @@ document.addEventListener('DOMContentLoaded', function(){
         alert(e)
       }
     })
-    .catch(err => {
-      console.log(err)
-      alert('您的浏览器不支持此功能')
-    })
+      .catch(err => {
+        console.log(err)
+        alert('您的浏览器不支持此功能')
+      })
+
+
+  }, false)
+
+
 }, false)
