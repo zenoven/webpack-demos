@@ -2,30 +2,7 @@
  * Created by zenoven@2018/5/18 15:38
  */
 import styles from './index.less'
-
-function getUserMedia(constrants){
-  if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-
-    return navigator.mediaDevices.getUserMedia(constrants)
-  }
-
-  let getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
-  if(!getUserMedia) {
-    return Promise.reject(new Error('很抱歉,您的浏览器不支持此功能'))
-  }
-
-  return new Promise((resolve, reject) => {
-    getUserMedia.call(navigator, constrants, resolve, reject)
-  })
-
-}
-
-function delay(duration){
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, duration)
-  })
-}
-getUserMedia.isNewAPI = !! (navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+import getUserMedia from 'libs/get-user-media'
 
 document.addEventListener('DOMContentLoaded', function(){
   let video = document.getElementById("video");
