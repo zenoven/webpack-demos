@@ -14,10 +14,16 @@
 
 <ul>
   <li>
-    <input type="file" accept="image/*" capture="camera" /> <label>capture="camera"</label>
+    <label>A: capture="camera"</label>
+    <input type="file" accept="image/*" capture="camera" />
   </li>
   <li>
-    <input type="file" accept="image/*" capture /> <label>only capture attribute, without any value</label>
+    <label>B: capture with no value</label>
+    <input type="file" accept="image/*" capture />
+  </li>
+  <li>
+    <label>C: no capture attribute</label>
+    <input type="file" accept="image/*" />
   </li>
 </ul>
 
