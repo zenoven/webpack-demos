@@ -13,7 +13,6 @@ let page = {
   bindEvents(){
     document.addEventListener('DOMContentLoaded', () => {
       this.data = [];
-
       ['id-front', 'id-back'].forEach((id, i) => {
         console.log('id', id)
         this.data[i] = {
@@ -35,25 +34,44 @@ let page = {
 
         this.data[i].reader.addEventListener('load', (e) => {
           this.data[i].image.src = e.target.result
-          console.log(this.data[i].image)
-          console.log('result:\n')
-          console.log(e.target.result)
         })
 
-        // 图片压缩处理，不超过最大尺寸
+        // 图片压缩、上传，不超过最大尺寸
         // 非箭头函数
-        this.data[i].image.addEventListener('load', function () {
-          console.log('originWidth:', this.naturalWidth)
-          console.log('originHeight:', this.naturalHeight)
-          if(this.naturalWidth > MAX_WIDTH || this.naturalHeight > MAX_HEIGHT) {
-
-          }
+        this.data[i].image.addEventListener('load', () => {
+          this.resize(this.data[i])
         }, false)
       })
 
     }, false)
 
 
+  },
+  resize(data){
+    let {canvas, context, image} = data
+    let resizedWidth = image.naturalWidth
+    let resizedHeight = image.naturalHeight
+    console.log('originWidth:', image.naturalWidth)
+    console.log('originHeight:', image.naturalHeight)
+    if(image.naturalWidth > MAX_WIDTH || image.naturalHeight > MAX_HEIGHT) {
+      if(image.naturalWidth / image.naturalHeight > 1) {
+        resizedWidth = MAX_WIDTH
+        resizedHeight = Math.round(MAX_WIDTH * image.naturalHeight / image.naturalWidth)
+      }else{
+        resizedHeight = MAX_HEIGHT
+        resizedWidth = Math.round(MAX_HEIGHT * image.naturalWidth / image.naturalHeight)
+      }
+    }
+
+    canvas.width = resizedWidth
+    canvas.height = resizedHeight
+    context.clearRect(0, 0, resizedWidth, resizedHeight)
+    context.drawImage(image, 0, 0, resizedWidth, resizedHeight)
+
+    canvas.toBlob((blob) => {
+      // TODO: 上传图片？
+      // console.log('blob:', blob)
+    })
   }
 }
 
