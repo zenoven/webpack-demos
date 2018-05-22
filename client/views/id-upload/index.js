@@ -2,6 +2,7 @@
  * Created by zenoven@2018/5/21 17:00
  */
 import './index.less'
+import ajax from 'libs/ajax'
 
 const MAX_WIDTH = 1200
 const MAX_HEIGHT = 1200
@@ -37,7 +38,6 @@ let page = {
         })
 
         // 图片压缩、上传，不超过最大尺寸
-        // 非箭头函数
         this.data[i].image.addEventListener('load', () => {
           this.resize(this.data[i])
         }, false)
@@ -51,8 +51,7 @@ let page = {
     let {canvas, context, image} = data
     let resizedWidth = image.naturalWidth
     let resizedHeight = image.naturalHeight
-    console.log('originWidth:', image.naturalWidth)
-    console.log('originHeight:', image.naturalHeight)
+
     if(image.naturalWidth > MAX_WIDTH || image.naturalHeight > MAX_HEIGHT) {
       if(image.naturalWidth / image.naturalHeight > 1) {
         resizedWidth = MAX_WIDTH
@@ -69,8 +68,23 @@ let page = {
     context.drawImage(image, 0, 0, resizedWidth, resizedHeight)
 
     canvas.toBlob((blob) => {
-      // TODO: 上传图片？
-      // console.log('blob:', blob)
+      ajax('/upload', {
+        method: 'post',
+        headers: {
+          'content-type': 'multipart/form-data'
+        },
+        body: {
+          image: blob
+        }
+      })
+        .then(result => {
+          alert('ok')
+          console.log('result:', result)
+        })
+        .catch(e => {
+          console.log('e:', e)
+        })
+
     })
   }
 }
