@@ -43,11 +43,9 @@ let page = {
         // 图片压缩处理，不超过最大尺寸
         // 非箭头函数
         this.data[i].image.addEventListener('load', function () {
-          let originWidth = this.width
-          let originHeight = this.height
-
-          console.log('process')
-          if(originWidth > MAX_WIDTH || originHeight > MAX_HEIGHT) {
+          console.log('originWidth:', this.naturalWidth)
+          console.log('originHeight:', this.naturalHeight)
+          if(this.naturalWidth > MAX_WIDTH || this.naturalHeight > MAX_HEIGHT) {
 
           }
         }, false)
