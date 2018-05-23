@@ -4,3 +4,4 @@ build
 dist
 server/views
 server/upload
+config/secret.json

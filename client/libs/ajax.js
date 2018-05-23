@@ -6,28 +6,20 @@ const defaultOptions = {
   method: 'GET',
   headers: {
     'content-type': 'application/json'
-  }
+  },
+  withCredentials: true
 }
 
 export default (url, options) => {
   let xhr = new XMLHttpRequest()
   options = Object.assign({}, defaultOptions, options)
-  xhr.open(options.method, url)
   options.body = options.body ? formatData(options.headers['content-type'], options.body) : null
 
   if(options.headers['content-type'].indexOf('multipart/form-data') > -1) {
-    console.log('options.headers:', options.headers)
     delete options.headers['content-type']
-    console.log('options.headers:', options.headers)
   }
 
-  Object.keys(options.headers).map(key => {
-    xhr.setRequestHeader(key, options.headers[key])
-  })
-
-
-
-  xhr.send(options.body)
+  xhr.withCredentials = options.withCredentials
 
   return new Promise((resolve, reject) => {
     xhr.onreadystatechange = () => {
@@ -49,6 +41,13 @@ export default (url, options) => {
       }
     }
     xhr.onerror = reject
+    xhr.open(options.method, url)
+
+    Object.keys(options.headers).map(key => {
+      xhr.setRequestHeader(key, options.headers[key])
+    })
+
+    xhr.send(options.body)
   })
 }
 
@@ -58,7 +57,14 @@ function formatData(contentType, data){
 
   if(contentType.indexOf('application/x-www-form-urlencoded') > -1){
     result = Object.keys(data).map(key => {
-      return `${key}=${encodeURIComponent(data[key])}`
+      let value = data[key]
+      if(typeof value === 'object' && value){
+        value = JSON.stringify(value)
+      }else if((typeof value === 'undefined' || typeof value === 'object') && !value){
+        return ''
+      }
+      value = encodeURIComponent(value)
+      return `${key}=${value}`
     }).join('&')
   }else if(contentType.indexOf('application/json') > -1) {
     result = JSON.stringify(data)
