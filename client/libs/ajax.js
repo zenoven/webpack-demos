@@ -65,7 +65,7 @@ function formatData(contentType, data){
       }
       value = encodeURIComponent(value)
       return `${key}=${value}`
-    }).join('&')
+    }).filter(x => x).join('&')
   }else if(contentType.indexOf('application/json') > -1) {
     result = JSON.stringify(data)
   }else if(contentType.indexOf('multipart/form-data') > -1){
