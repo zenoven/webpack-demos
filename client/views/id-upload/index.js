@@ -7,7 +7,6 @@ import config from '../../../config/secret'
 const MAX_WIDTH = 1200
 const MAX_HEIGHT = 1200
 
-const abc = {}
 let page = {
   init(){
     this.bindEvents()
@@ -16,7 +15,6 @@ let page = {
     document.addEventListener('DOMContentLoaded', () => {
       this.initFileUpload()
       this.fetMerchantConfig()
-
     }, false)
   },
 
@@ -29,7 +27,7 @@ let page = {
       body: {
         world: '',
         hello: '123',
-        und: abc.test,
+        und: window.test,
         aaa: null,
         params: {
           merchantType: 1

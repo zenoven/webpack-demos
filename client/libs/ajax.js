@@ -75,8 +75,6 @@ function formatData(contentType, data){
       console.log(data[field])
       result.append(field, data[field])
     })
-    console.log('result:', result)
-    console.log('result.toString():', result.toString())
   }else{
     result = data
   }
