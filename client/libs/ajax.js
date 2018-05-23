@@ -12,7 +12,6 @@ const defaultOptions = {
 export default (url, options) => {
   let xhr = new XMLHttpRequest()
   options = Object.assign({}, defaultOptions, options)
-  xhr.open(options.method, url)
   options.body = options.body ? formatData(options.headers['content-type'], options.body) : null
 
   if(options.headers['content-type'].indexOf('multipart/form-data') > -1) {
@@ -25,9 +24,7 @@ export default (url, options) => {
     xhr.setRequestHeader(key, options.headers[key])
   })
 
-
-
-  xhr.send(options.body)
+  xhr.withCredentials = options.withCredentials
 
   return new Promise((resolve, reject) => {
     xhr.onreadystatechange = () => {
@@ -49,6 +46,8 @@ export default (url, options) => {
       }
     }
     xhr.onerror = reject
+    xhr.open(options.method, url)
+    xhr.send(options.body)
   })
 }
 
